@@ -105,49 +105,42 @@ export class RequestHandler {
     }
 
     private async validateResponse(response: any, expectedStatus: number) {
-        const status = response.status();
-        const text = await response.text();
-        let responseJSON;
+        const status = response.status()
+        const text = await response.text()
+        let responseJSON
 
-        // 1. Log detallado de depuración (Solo se dispara si hay error)
         if (status !== expectedStatus) {
             console.error(`
-            ❌ API ERROR DEBUG:
+            API ERROR DEBUG:
             - URL: ${response.url()}
             - Expected Status: ${expectedStatus}
             - Received Status: ${status}
             - Response Body: ${text || 'Empty Body'}
-            `);
+            `)
         }
 
-        // 2. Intento de parsear el JSON de forma segura
         try {
-            responseJSON = text ? JSON.parse(text) : null;
+            responseJSON = text ? JSON.parse(text) : null
         } catch (error) {
-            // Si no es JSON (como un error 403 en HTML), guardamos el raw para no romper el flujo
-            responseJSON = { message: 'Response is not a valid JSON', raw: text };
+            responseJSON = { message: 'Response is not a valid JSON', raw: text }
         }
 
-        // 3. Aserción del Status Code
-        // Se hace DESPUÉS del log para que Playwright alcance a imprimir el error en la consola
         expect(status).toBe(expectedStatus);
 
-        // 4. Validación de Esquema (AJV)
         if (this.schema && responseJSON && status === expectedStatus) {
-            const validate = ajv.compile(this.schema);
-            const valid = validate(responseJSON);
+            const validate = ajv.compile(this.schema)
+            const valid = validate(responseJSON)
 
             if (!valid) {
-                const errors = JSON.stringify(validate.errors, null, 2);
-                console.error(`❌ SCHEMA VALIDATION ERROR: ${errors}`);
-                throw new Error(`Schema Validation Failed: ${errors}`);
+                const errors = JSON.stringify(validate.errors, null, 2)
+                console.error(`SCHEMA VALIDATION ERROR: ${errors}`)
+                throw new Error(`Schema Validation Failed: ${errors}`)
             }
         }
 
-        // 5. Resetear el estado del handler para la siguiente petición
-        this.reset();
+        this.reset()
 
-        return responseJSON;
+        return responseJSON
     }
 
     private reset() {
