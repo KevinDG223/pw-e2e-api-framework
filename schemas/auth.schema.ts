@@ -1,0 +1,8 @@
+export const LoginSchema = {
+    type: 'object',
+    properties: {
+        token: {type: 'string'}
+    },
+    required: ['token'],
+    additionalProperties: false
+}
