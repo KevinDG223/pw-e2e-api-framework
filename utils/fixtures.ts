@@ -12,9 +12,9 @@ export type TestOptions = {
 }
 
 export const test = base.extend<TestOptions>({
-    api: async ({ request }, use) => {
-        const baseUrl = 'https://fakestoreapi.com'
-        const requestHandler = new RequestHandler(request, baseUrl)
+    api: async ({ request, baseURL }, use) => {
+        const finalUrl = baseURL || 'https://fakestoreapi.com'
+        const requestHandler = new RequestHandler(request, finalUrl)
         await use(requestHandler)
     },
 

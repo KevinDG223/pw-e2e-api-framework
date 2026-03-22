@@ -64,11 +64,7 @@ export class RequestHandler {
         const response = await this.request.get(url, {
             headers: this.getHeaders()
         })
-        expect(response.status()).toEqual(statusCode)
-        const text = await response.text()
-        const responseJSON = text ? JSON.parse(text) : null
-
-        return responseJSON
+        return await this.validateResponse(response, statusCode)
     }
 
     async postRequest(statusCode: number) {
@@ -95,7 +91,7 @@ export class RequestHandler {
         const url = this.getUrl()
         const response = await this.request.patch(url, {
             headers: this.getHeaders(),
-            data: this.apiBody
+            data: this.apiBody 
         })
         return await this.validateResponse(response, statusCode)
     }

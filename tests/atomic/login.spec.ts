@@ -1,4 +1,3 @@
-import { AuthApi } from '../../API/auth.api'
 import { test } from '../../utils/fixtures'
 import { expect } from '@playwright/test'
 

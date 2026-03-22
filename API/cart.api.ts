@@ -1,4 +1,4 @@
-import { CartSchema} from '../utils/schemas/cart.schema'
+import { CartSchema} from '../schemas/cart.schema'
 
 export class CartApi {
     private readonly endpoint = '/carts'

@@ -2,6 +2,9 @@ import { test } from '../../utils/fixtures'
 import { expect } from '@playwright/test'
 
 test.describe('Cart Management - Create Cart', () => {
+    test.beforeEach(async({authApi}) => {
+        await authApi.login({username: 'mor_2314', password: '83r5^_'})
+    })
     const userId = 1
     const defaultProducts = [
         {productId: 1, quantity: 3}, 

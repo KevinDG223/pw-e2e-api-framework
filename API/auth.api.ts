@@ -1,4 +1,4 @@
-import { LoginSchema } from "../schemas/auth.schema"
+import { LoginSchema } from "../schemas//auth.schema"
 
 export class AuthApi {
     private endpoint = '/auth/login'

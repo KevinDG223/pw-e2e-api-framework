@@ -1,4 +1,4 @@
-import { ProductSchema, ProductListSchema } from '../utils/schemas/products.schema'
+import { ProductSchema, ProductListSchema } from '../schemas/products.schema'
 export class ProductApi {
     constructor(private api: any) { }
 
@@ -43,7 +43,7 @@ export class ProductApi {
 
     async deleteProduct(id: number) {
         return await this.api
-            .path(`products/${id}`)
+            .path(`/products/${id}`)
             .deleteRequest(200)
     }
 }
