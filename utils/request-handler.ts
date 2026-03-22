@@ -105,28 +105,44 @@ export class RequestHandler {
     }
 
     private async validateResponse(response: any, expectedStatus: number) {
-        expect(response.status()).toEqual(expectedStatus)
-        const text = await response.text()
-        let responseJSON
+    const status = response.status()
+    const text = await response.text()
+    let responseJSON
 
-        try {
-            responseJSON = text ? JSON.parse(text) : null
-        } catch (error) {
-            responseJSON = { message: 'Response is not a valido JSON', raw: text }
-        }
-
-        if(this.schema && responseJSON){
-            const validate = ajv.compile(this.schema)
-            const valid = validate(responseJSON)
-
-            if(!valid){
-                const errors = JSON.stringify(validate.errors, null, 2)
-                throw new Error(`Schema Validation Failed: ${errors}`)
-            }
-        }
-        this.reset()
-        return responseJSON
+    if (status !== expectedStatus) {
+        console.error(`
+        API ERROR DEBUG:
+        - URL: ${response.url()}
+        - Method: ${response.request().method()}
+        - Expected Status: ${expectedStatus}
+        - Received Status: ${status}
+        - Response Body: ${text || 'Empty Body'}
+        `)
     }
+
+    try {
+        responseJSON = text ? JSON.parse(text) : null
+    } catch (error) {
+        responseJSON = { message: 'Response is not a valid JSON', raw: text }
+    }
+
+    expect(status).toEqual(expectedStatus)
+
+    if (this.schema && responseJSON) {
+        const validate = ajv.compile(this.schema)
+        const valid = validate(responseJSON)
+
+        if (!valid) {
+            const errors = JSON.stringify(validate.errors, null, 2)
+            console.error(`❌ Schema Validation Errors: ${errors}`)
+            throw new Error(`Schema Validation Failed: ${errors}`)
+        }
+    }
+
+    this.reset();
+    return responseJSON;
+}
+
     private reset() {
         this.apiPath = ''
         this.queryParams = {}
