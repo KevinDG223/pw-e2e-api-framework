@@ -29,6 +29,13 @@ The framework includes automated tests for:
 - Purchase flow simulation
 - API response validation (status, structure, data integrity)
 
+## ⚙️ How It Works
+
+- Tests call API layer (AOM)
+- API layer handles requests via Playwright
+- Mock/local API ensures deterministic responses
+- Assertions validate status, structure, and data integrity
+
 ## 🧱 Architecture
 
 The project follows an API Object Model (AOM) pattern:
